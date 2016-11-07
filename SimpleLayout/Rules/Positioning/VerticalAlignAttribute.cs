@@ -8,7 +8,7 @@ using SimpleLayout.Layout;
 namespace SimpleLayout.Rules.Positioning
 {
     [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
-    public class VerticalAlignAttribute : Attribute, IStyleRule
+    public class VerticalAlignAttribute : PostLayoutRule
     {
         public VerticalAlign Align { get; }
 
@@ -17,7 +17,7 @@ namespace SimpleLayout.Rules.Positioning
             Align = align;
         }
 
-        public void Process(IElement element)
+        public override void Process(IElement element)
         {
         }
     }

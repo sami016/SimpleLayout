@@ -8,7 +8,7 @@ using SimpleLayout.Layout;
 namespace SimpleLayout.Rules.Positioning
 {
     [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
-    public class MarginAttribute : Attribute, IStyleRule
+    public class MarginAttribute : PreLayoutRule
     {
         protected SurroundSpacing Margin { get; }
 
@@ -23,7 +23,7 @@ namespace SimpleLayout.Rules.Positioning
             };
         }
 
-        public void Process(IElement element)
+        public override void Process(IElement element)
         {
             element.Margin = Margin;
         }

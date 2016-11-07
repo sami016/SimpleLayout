@@ -7,7 +7,7 @@ using SimpleLayout.Layout;
 namespace SimpleLayout.Rules.Positioning
 {
     [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
-    public class SizeAttribute : Attribute, IStyleRule
+    public class SizeAttribute : PreLayoutRule
     {
         public float Width { get; set; }
         public float Height { get; set; }
@@ -18,7 +18,8 @@ namespace SimpleLayout.Rules.Positioning
             Height = height;
         }
 
-        public void Process(IElement element)
+
+        public override void Process(IElement element)
         {
             element.Rectangle.Width = Width;
             element.Rectangle.Height = Height;

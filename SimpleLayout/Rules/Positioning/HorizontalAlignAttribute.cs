@@ -7,7 +7,7 @@ using SimpleLayout.Layout;
 
 namespace SimpleLayout.Rules.Positioning
 {
-    public class HorizontalAlignAttribute : IStyleRule
+    public class HorizontalAlignAttribute : PostLayoutRule
     {
         public HorizontalAlign Align { get; }
 
@@ -16,7 +16,7 @@ namespace SimpleLayout.Rules.Positioning
             Align = align;
         }
 
-        public void Process(IElement element)
+        public override void Process(IElement element)
         {
         }
     }

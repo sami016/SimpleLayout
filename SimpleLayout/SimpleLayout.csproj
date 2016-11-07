@@ -63,6 +63,8 @@
     <Compile Include="Rules\Positioning\HorizontalAlignAttribute.cs" />
     <Compile Include="Rules\Positioning\OffsetAttribute.cs" />
     <Compile Include="Rules\Positioning\SizeAttribute.cs" />
+    <Compile Include="Rules\PostLayoutRule.cs" />
+    <Compile Include="Rules\PreLayoutRule.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

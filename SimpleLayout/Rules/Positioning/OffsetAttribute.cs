@@ -7,7 +7,7 @@ using SimpleLayout.Layout;
 namespace SimpleLayout.Rules.Positioning
 {
     [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
-    public class OffsetAttribute : Attribute, IStyleRule
+    public class OffsetAttribute : PostLayoutRule
     {
         public float xOffset { get; set; }
         public float yOffset { get; set; }
@@ -18,7 +18,7 @@ namespace SimpleLayout.Rules.Positioning
             this.yOffset = yOffset;
         }
 
-        public void Process(IElement element)
+        public override void Process(IElement element)
         {
             element.Rectangle.Translate(xOffset, yOffset);
         }

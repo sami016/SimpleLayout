@@ -8,7 +8,7 @@ using SimpleLayout.Layout;
 namespace SimpleLayout.Rules.Positioning
 {
     [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
-    public class PaddingAttribute : Attribute, IStyleRule
+    public class PaddingAttribute : PreLayoutRule
     {
         protected SurroundSpacing Padding { get; }
 
@@ -23,7 +23,7 @@ namespace SimpleLayout.Rules.Positioning
             };
         }
 
-        public void Process(IElement element)
+        public override void Process(IElement element)
         {
             element.Padding = Padding;
         }

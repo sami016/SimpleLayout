@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SimpleLayout.Geometry;
+using SimpleLayout.Rules;
 using SimpleLayout.Rules.Positioning;
 
 namespace SimpleLayout.Layout.Engine
@@ -24,8 +25,9 @@ namespace SimpleLayout.Layout.Engine
         {
             // Sort the rules for each element.
             InitialPass(root, elements);
-            StylePass(root, elements);
+            StylePass(root, elements, true);
             LayoutPass(root, elements);
+            StylePass(root, elements, false);
         }
 
         /// <summary>
@@ -49,18 +51,29 @@ namespace SimpleLayout.Layout.Engine
             }
         }
 
-        public void StylePass(IElement root, IList<IElement> elements)
+        public void StylePass(IElement root, IList<IElement> elements, bool isPreLayout)
         {
             foreach (var element in elements)
             {
-                foreach (var style in element.StyleRules)
+
+                IEnumerable<IStyleRule> releventStyles;
+                if (isPreLayout)
+                {
+                    releventStyles = element.StyleRules.Where(x => x is PreLayoutRule);
+                }
+                else
+                {
+                    releventStyles= element.StyleRules.Where(x => x is PostLayoutRule);
+                }
+
+                foreach (var style in releventStyles)
                 {
                     style.Process(element);
                 }
                 // Recurse for nested elements.
                 if (element.Children != null)
                 {
-                    StylePass(element, element.Children);
+                    StylePass(element, element.Children, isPreLayout);
                 }
             }
         }
