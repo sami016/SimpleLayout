@@ -21,6 +21,12 @@ namespace SimpleLayout.Layout
         Rectangle Rectangle { set;  get; }
 
         /// <summary>
+        /// Determines the element's visibility.
+        /// If false, no render will be performed.
+        /// </summary>
+        bool Visible { get; set; }
+
+        /// <summary>
         /// Margin spacing.
         /// </summary>
         SurroundSpacing Margin { get; set; }
