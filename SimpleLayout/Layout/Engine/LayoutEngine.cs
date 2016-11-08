@@ -10,24 +10,38 @@ namespace SimpleLayout.Layout.Engine
 {
     public class LayoutEngine : ILayoutEngine
     {
-        IList<Type> ruleOrdering;
+        public enum Phase
+        {
+            PRE_LAYOUT,
+            MID_LAYOUT,
+            POST_LAYOUT
+        }
+
+        private readonly IList<Type> _ruleOrdering;
 
         public LayoutEngine()
         {
-            ruleOrdering = new List<Type>();
+            _ruleOrdering = new List<Type>();
 
             // Positioning
-            ruleOrdering.Add(typeof(OffsetAttribute));
-            ruleOrdering.Add(typeof(SizeAttribute));
+            _ruleOrdering.Add(typeof(OffsetAttribute));
+            _ruleOrdering.Add(typeof(SizeAttribute));
         }
 
         public void PerformLayout(IElement root, IList<IElement> elements)
         {
             // Sort the rules for each element.
             InitialPass(root, elements);
-            StylePass(root, elements, true);
+            // Apply initial styles - usually sizing information.
+            StylePass(root, elements, Phase.PRE_LAYOUT);
+            // First layout pass - estimate initial positions.
             LayoutPass(root, elements);
-            StylePass(root, elements, false);
+            // Use estimated position for mid layout styling. e.g. elastic containers.
+            StylePass(root, elements, Phase.MID_LAYOUT);
+            // Perform the final layout pass to adjust for mid styling rules.
+            LayoutPass(root, elements);
+            // Apply final post layout styling.
+            StylePass(root, elements, Phase.POST_LAYOUT);
         }
 
         /// <summary>
@@ -39,31 +53,36 @@ namespace SimpleLayout.Layout.Engine
         {
             foreach (var element in elements)
             {
-                SortStylesForElement(element);
-                element.Rectangle.x = 0;
-                element.Rectangle.y = 0;
-                element.DefaultSizing();
                 // Recurse for nested elements.
                 if (element.Children != null)
                 {
                     InitialPass(element, element.Children);
                 }
+
+                SortStylesForElement(element);
+                element.Rectangle.x = 0;
+                element.Rectangle.y = 0;
+                element.DefaultSizing();
             }
         }
 
-        public void StylePass(IElement root, IList<IElement> elements, bool isPreLayout)
+        public void StylePass(IElement root, IList<IElement> elements, Phase phase)
         {
             foreach (var element in elements)
             {
 
-                IEnumerable<IStyleRule> releventStyles;
-                if (isPreLayout)
+                IEnumerable<IStyleRule> releventStyles = null;
+                switch (phase)
                 {
-                    releventStyles = element.StyleRules.Where(x => x is PreLayoutRule);
-                }
-                else
-                {
-                    releventStyles= element.StyleRules.Where(x => x is PostLayoutRule);
+                    case Phase.PRE_LAYOUT:
+                        releventStyles = element.StyleRules.Where(x => x is PreLayoutRule);
+                        break;
+                    case Phase.MID_LAYOUT:
+                        releventStyles = element.StyleRules.Where(x => x is MidLayoutRule);
+                        break;
+                    case Phase.POST_LAYOUT:
+                        releventStyles= element.StyleRules.Where(x => x is PostLayoutRule);
+                        break;
                 }
 
                 foreach (var style in releventStyles)
@@ -73,7 +92,7 @@ namespace SimpleLayout.Layout.Engine
                 // Recurse for nested elements.
                 if (element.Children != null)
                 {
-                    StylePass(element, element.Children, isPreLayout);
+                    StylePass(element, element.Children, phase);
                 }
             }
         }
@@ -94,7 +113,7 @@ namespace SimpleLayout.Layout.Engine
 
         private void SortStylesForElement(IElement element)
         {
-            element.StyleRules = element.StyleRules.OrderBy(x => ruleOrdering.IndexOf(x.GetType())).ToList();
+            element.StyleRules = element.StyleRules.OrderBy(x => _ruleOrdering.IndexOf(x.GetType())).ToList();
         }
     }
 }

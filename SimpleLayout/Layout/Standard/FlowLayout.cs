@@ -16,6 +16,9 @@ namespace SimpleLayout.Layout.Standard
         public void Reset(IElement container)
         {
             bounds = container.Rectangle;
+            currentX = 0f;
+            currentY = 0f;
+            maxRowHeight = 0f;
         }
 
         private void NewRow()

@@ -15,12 +15,13 @@ namespace SimpleLayout.Layout.Standard
             Alignment = alignment;
         }
 
-        private float _x = 0f;
+        private float _x;
         private IElement _container;
 
         public void Reset(IElement container)
         {
             _container = container;
+            _x = 0f;
         }
 
         public void Process(IElement element)

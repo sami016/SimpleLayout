@@ -74,5 +74,10 @@ namespace SimpleLayout.Layout
         /// Initialises the elements sizing before layout or style are applied.
         /// </summary>
         void DefaultSizing();
+
+        /// <summary>
+        /// Refreshes the layout for this element and it's children.
+        /// </summary>
+        void RefreshLayout();
     }
 }

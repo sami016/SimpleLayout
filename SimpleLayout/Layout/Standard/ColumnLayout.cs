@@ -21,6 +21,7 @@ namespace SimpleLayout.Layout.Standard
         public void Reset(IElement container)
         {
             _container = container;
+            _y = 0f;
         }
 
         public void Process(IElement element)
