@@ -53,6 +53,7 @@
     <Compile Include="Layout\IElement.cs" />
     <Compile Include="Layout\Standard\PassiveLayout.cs" />
     <Compile Include="Layout\Standard\RowLayout.cs" />
+    <Compile Include="Layout\Standard\SwitchLayout.cs" />
     <Compile Include="Markup\ElementAttribute.cs" />
     <Compile Include="Markup\MarkupLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

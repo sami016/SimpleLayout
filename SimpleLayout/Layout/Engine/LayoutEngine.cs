@@ -48,6 +48,7 @@ namespace SimpleLayout.Layout.Engine
         /// Sorts the rules for each element in order of which should be evalutated first.
         /// Resets each elements position.
         /// </summary>
+        /// <param name="root"></param>
         /// <param name="elements"></param>
         public void InitialPass(IElement root, IList<IElement> elements)
         {

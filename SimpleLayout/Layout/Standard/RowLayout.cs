@@ -9,6 +9,7 @@ namespace SimpleLayout.Layout.Standard
     public class RowLayout : ILayout
     {
         public VerticalAlign Alignment { get; set; }
+        public float Spacing { get; set; }
 
         public RowLayout(VerticalAlign alignment)
         {
@@ -38,7 +39,7 @@ namespace SimpleLayout.Layout.Standard
                     element.MoveTo(_x, _container.Rectangle.Height - element.Rectangle.Height);
                     break;
             }
-            _x += element.RectangleWithMargin.Width;
+            _x += element.RectangleWithMargin.Width + Spacing;
         }
     }
 }

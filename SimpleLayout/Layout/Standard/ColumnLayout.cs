@@ -9,6 +9,7 @@ namespace SimpleLayout.Layout.Standard
     public class ColumnLayout : ILayout
     {
         public HorizontalAlign Alignment { get; set; }
+        public float Spacing { get; set; }
 
         public ColumnLayout(HorizontalAlign alignment)
         {
@@ -38,7 +39,7 @@ namespace SimpleLayout.Layout.Standard
                     element.MoveTo(_container.Rectangle.Width - element.Rectangle.Width, _y);
                     break;
             }
-            _y += element.RectangleWithMargin.Height;
+            _y += element.RectangleWithMargin.Height + Spacing;
         }
     }
 }
