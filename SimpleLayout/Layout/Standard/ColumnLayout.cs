@@ -33,10 +33,10 @@ namespace SimpleLayout.Layout.Standard
                     element.MoveTo(0f, _y);
                     break;
                 case HorizontalAlign.Center:
-                    element.MoveTo((_container.Rectangle.Width - element.Rectangle.Width) / 2f, _y);
+                    element.MoveTo((_container.Rectangle.Width - element.RectangleWithMargin.Width) / 2f, _y);
                     break;
                 case HorizontalAlign.Right:
-                    element.MoveTo(_container.Rectangle.Width - element.Rectangle.Width, _y);
+                    element.MoveTo(_container.Rectangle.Width - element.RectangleWithMargin.Width, _y);
                     break;
             }
             _y += element.RectangleWithMargin.Height + Spacing;
