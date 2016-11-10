@@ -120,8 +120,8 @@ namespace SimpleLayout.Geometry
         {
             _x += xOffset;
             _x2 += xOffset;
-            _y += xOffset;
-            _y2 += xOffset;
+            _y += yOffset;
+            _y2 += yOffset;
         }
 
 

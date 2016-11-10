@@ -30,18 +30,14 @@ namespace SimpleLayout.Layout.Engine
 
         public void PerformLayout(IElement root, IList<IElement> elements)
         {
-            // Sort the rules for each element.
+            // Sort the rules for each element, also applies pre layout styling.
             InitialPass(root, elements);
-            // Apply initial styles - usually sizing information.
-            StylePass(root, elements, Phase.PRE_LAYOUT);
             // First layout pass - estimate initial positions.
             LayoutPass(root, elements);
-            // Use estimated position for mid layout styling. e.g. elastic containers.
-            StylePass(root, elements, Phase.MID_LAYOUT);
             // Perform the final layout pass to adjust for mid styling rules.
-            LayoutPass(root, elements);
+            //SecondLayoutPass(root, elements);
             // Apply final post layout styling.
-            StylePass(root, elements, Phase.POST_LAYOUT);
+            FinalStylePass(root, elements);
         }
 
         /// <summary>
@@ -50,67 +46,76 @@ namespace SimpleLayout.Layout.Engine
         /// </summary>
         /// <param name="root"></param>
         /// <param name="elements"></param>
+        // Initial pass is applied from the top down.
         public void InitialPass(IElement root, IList<IElement> elements)
         {
             foreach (var element in elements)
             {
+                SortStylesForElement(element);
+                element.Rectangle.x = 0;
+                element.Rectangle.y = 0;
+                element.DefaultSizing();
+                StyleElement(element, Phase.PRE_LAYOUT);
                 // Recurse for nested elements.
                 if (element.Children != null)
                 {
                     InitialPass(element, element.Children);
                 }
-
-                SortStylesForElement(element);
-                element.Rectangle.x = 0;
-                element.Rectangle.y = 0;
-                element.DefaultSizing();
             }
         }
 
-        public void StylePass(IElement root, IList<IElement> elements, Phase phase)
+        private void StyleElement(IElement element, Phase phase)
+        {
+            IEnumerable<IStyleRule> releventStyles = null;
+            switch (phase)
+            {
+                case Phase.PRE_LAYOUT:
+                    releventStyles = element.StyleRules.Where(x => x is PreLayoutRule);
+                    break;
+                case Phase.MID_LAYOUT:
+                    releventStyles = element.StyleRules.Where(x => x is MidLayoutRule);
+                    break;
+                case Phase.POST_LAYOUT:
+                    releventStyles = element.StyleRules.Where(x => x is PostLayoutRule);
+                    break;
+            }
+
+            foreach (var style in releventStyles)
+            {
+                style.Process(element);
+            }
+        }
+
+        // Style pass is applied from the bottom up.
+        public void FinalStylePass(IElement root, IList<IElement> elements)
         {
             foreach (var element in elements)
             {
-
-                IEnumerable<IStyleRule> releventStyles = null;
-                switch (phase)
-                {
-                    case Phase.PRE_LAYOUT:
-                        releventStyles = element.StyleRules.Where(x => x is PreLayoutRule);
-                        break;
-                    case Phase.MID_LAYOUT:
-                        releventStyles = element.StyleRules.Where(x => x is MidLayoutRule);
-                        break;
-                    case Phase.POST_LAYOUT:
-                        releventStyles= element.StyleRules.Where(x => x is PostLayoutRule);
-                        break;
-                }
-
-                foreach (var style in releventStyles)
-                {
-                    style.Process(element);
-                }
                 // Recurse for nested elements.
                 if (element.Children != null)
                 {
-                    StylePass(element, element.Children, phase);
+                    FinalStylePass(element, element.Children);
                 }
+                StyleElement(root, Phase.POST_LAYOUT);
             }
         }
 
+        // Layout pass is performed from the bottom up.
         public void LayoutPass(IElement root, IList<IElement> elements)
         {
+            foreach (var element in elements)
+            {
+                LayoutPass(element, element.Children);
+            }
+            // Apply layout to parent after children.
             root.Layout.Reset(root);
             foreach (var element in elements)
             {
+                StyleElement(element, Phase.MID_LAYOUT);
                 root.Layout.Process(element);
-                // Recurse for nested elements.
-                if (element.Children != null)
-                {
-                    LayoutPass(element, element.Children);
-                }
             }
         }
+
 
         private void SortStylesForElement(IElement element)
         {
