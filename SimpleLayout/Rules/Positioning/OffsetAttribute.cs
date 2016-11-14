@@ -18,9 +18,9 @@ namespace SimpleLayout.Rules.Positioning
             this.yOffset = yOffset;
         }
 
-        public override void Process(IElement element)
+        public override void Process(ILayoutElement layoutElement)
         {
-            element.Rectangle.Translate(xOffset, yOffset);
+            layoutElement.Rectangle.Translate(xOffset, yOffset);
         }
     }
 }

@@ -118,5 +118,17 @@ namespace SimpleLayout.Geometry
             Width = width;
             Height = height;
         }
+
+        /// <summary>
+        /// Checks whether the rectangle contains a given point.
+        /// </summary>
+        /// <param name="xPos">x position</param>
+        /// <param name="yPos">y position</param>
+        /// <returns>true if contained</returns>
+        public bool ContainsPoint(float xPos, float yPos) =>
+            xPos >= x
+            && xPos <= x2
+            && yPos >= y
+            && yPos <= y2;
     }
 }

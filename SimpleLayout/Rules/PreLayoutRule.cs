@@ -9,6 +9,6 @@ namespace SimpleLayout.Rules
 {
     public abstract class PreLayoutRule : Attribute, IStyleRule
     {
-        public abstract void Process(IElement element);
+        public abstract void Process(ILayoutElement layoutElement);
     }
 }

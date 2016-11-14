@@ -28,9 +28,9 @@ namespace SimpleLayout.Layout.Engine
             _ruleOrdering.Add(typeof(SizeAttribute));
         }
 
-        public void PerformLayout(IElement root, IList<IElement> elements)
+        public void PerformLayout(ILayoutElement root, IList<ILayoutElement> elements)
         {
-            // Sort the rules for each element, also applies pre layout styling.
+            // Sort the rules for each layoutElement, also applies pre layout styling.
             InitialPass(root, elements);
             // First layout pass - estimate initial positions.
             LayoutPass(root, elements);
@@ -41,13 +41,13 @@ namespace SimpleLayout.Layout.Engine
         }
 
         /// <summary>
-        /// Sorts the rules for each element in order of which should be evalutated first.
+        /// Sorts the rules for each layoutElement in order of which should be evalutated first.
         /// Resets each elements position.
         /// </summary>
         /// <param name="root"></param>
         /// <param name="elements"></param>
         // Initial pass is applied from the top down.
-        public void InitialPass(IElement root, IList<IElement> elements)
+        public void InitialPass(ILayoutElement root, IList<ILayoutElement> elements)
         {
             foreach (var element in elements)
             {
@@ -64,30 +64,30 @@ namespace SimpleLayout.Layout.Engine
             }
         }
 
-        private void StyleElement(IElement element, Phase phase)
+        private void StyleElement(ILayoutElement layoutElement, Phase phase)
         {
             IEnumerable<IStyleRule> releventStyles = null;
             switch (phase)
             {
                 case Phase.PRE_LAYOUT:
-                    releventStyles = element.StyleRules.Where(x => x is PreLayoutRule);
+                    releventStyles = layoutElement.StyleRules.Where(x => x is PreLayoutRule);
                     break;
                 case Phase.MID_LAYOUT:
-                    releventStyles = element.StyleRules.Where(x => x is MidLayoutRule);
+                    releventStyles = layoutElement.StyleRules.Where(x => x is MidLayoutRule);
                     break;
                 case Phase.POST_LAYOUT:
-                    releventStyles = element.StyleRules.Where(x => x is PostLayoutRule);
+                    releventStyles = layoutElement.StyleRules.Where(x => x is PostLayoutRule);
                     break;
             }
 
             foreach (var style in releventStyles)
             {
-                style.Process(element);
+                style.Process(layoutElement);
             }
         }
 
         // Style pass is applied from the bottom up.
-        public void FinalStylePass(IElement root, IList<IElement> elements)
+        public void FinalStylePass(ILayoutElement root, IList<ILayoutElement> elements)
         {
             foreach (var element in elements)
             {
@@ -101,7 +101,7 @@ namespace SimpleLayout.Layout.Engine
         }
 
         // Layout pass is performed from the bottom up.
-        public void LayoutPass(IElement root, IList<IElement> elements)
+        public void LayoutPass(ILayoutElement root, IList<ILayoutElement> elements)
         {
             foreach (var element in elements)
             {
@@ -117,9 +117,9 @@ namespace SimpleLayout.Layout.Engine
         }
 
 
-        private void SortStylesForElement(IElement element)
+        private void SortStylesForElement(ILayoutElement layoutElement)
         {
-            element.StyleRules = element.StyleRules.OrderBy(x => _ruleOrdering.IndexOf(x.GetType())).ToList();
+            layoutElement.StyleRules = layoutElement.StyleRules.OrderBy(x => _ruleOrdering.IndexOf(x.GetType())).ToList();
         }
     }
 }

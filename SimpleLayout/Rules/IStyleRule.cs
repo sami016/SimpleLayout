@@ -8,6 +8,6 @@ namespace SimpleLayout.Rules
 {
     public interface IStyleRule
     {
-        void Process(IElement element);
+        void Process(ILayoutElement layoutElement);
     }
 }

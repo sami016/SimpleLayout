@@ -17,29 +17,29 @@ namespace SimpleLayout.Layout.Standard
         }
 
         private float _y = 0f;
-        private IElement _container;
+        private ILayoutElement _container;
 
-        public void Reset(IElement container)
+        public void Reset(ILayoutElement container)
         {
             _container = container;
             _y = 0f;
         }
 
-        public void Process(IElement element)
+        public void Process(ILayoutElement layoutElement)
         {
             switch (Alignment)
             {
                 case HorizontalAlign.Left:
-                    element.MoveTo(0f, _y);
+                    layoutElement.MoveTo(0f, _y);
                     break;
                 case HorizontalAlign.Center:
-                    element.MoveTo((_container.Rectangle.Width - element.RectangleWithMargin.Width) / 2f, _y);
+                    layoutElement.MoveTo((_container.Rectangle.Width - layoutElement.RectangleWithMargin.Width) / 2f, _y);
                     break;
                 case HorizontalAlign.Right:
-                    element.MoveTo(_container.Rectangle.Width - element.RectangleWithMargin.Width, _y);
+                    layoutElement.MoveTo(_container.Rectangle.Width - layoutElement.RectangleWithMargin.Width, _y);
                     break;
             }
-            _y += element.RectangleWithMargin.Height + Spacing;
+            _y += layoutElement.RectangleWithMargin.Height + Spacing;
         }
     }
 }

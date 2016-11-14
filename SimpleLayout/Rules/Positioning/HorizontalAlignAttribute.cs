@@ -16,7 +16,7 @@ namespace SimpleLayout.Rules.Positioning
             Align = align;
         }
 
-        public override void Process(IElement element)
+        public override void Process(ILayoutElement layoutElement)
         {
         }
     }

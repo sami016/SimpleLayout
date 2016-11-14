@@ -9,6 +9,6 @@ namespace SimpleLayout.Rules
 {
     public abstract class MidLayoutRule : Attribute, IStyleRule
     {
-        public abstract void Process(IElement element);
+        public abstract void Process(ILayoutElement layoutElement);
     }
 }

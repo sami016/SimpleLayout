@@ -19,10 +19,10 @@ namespace SimpleLayout.Rules.Positioning
         }
 
 
-        public override void Process(IElement element)
+        public override void Process(ILayoutElement layoutElement)
         {
-            element.Rectangle.Width = Width;
-            element.Rectangle.Height = Height;
+            layoutElement.Rectangle.Width = Width;
+            layoutElement.Rectangle.Height = Height;
         }
     }
 }

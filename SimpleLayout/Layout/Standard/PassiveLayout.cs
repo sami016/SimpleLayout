@@ -6,11 +6,11 @@
     /// </summary>
     public class PassiveLayout : ILayout
     {
-        public void Reset(IElement container)
+        public void Reset(ILayoutElement container)
         {
         }
 
-        public void Process(IElement element)
+        public void Process(ILayoutElement layoutElement)
         {
         }
     }

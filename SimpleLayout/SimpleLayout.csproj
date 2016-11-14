@@ -45,12 +45,13 @@
     <Compile Include="Enums\VerticalAlign.cs" />
     <Compile Include="Geometry\SurroundSpacing.cs" />
     <Compile Include="Geometry\Rectangle.cs" />
+    <Compile Include="Interaction\ElementLocator.cs" />
     <Compile Include="Layout\Engine\LayoutEngine.cs" />
     <Compile Include="Layout\Standard\ColumnLayout.cs" />
     <Compile Include="Layout\Standard\FlowLayout.cs" />
     <Compile Include="Layout\ILayout.cs" />
     <Compile Include="Layout\Engine\ILayoutEngine.cs" />
-    <Compile Include="Layout\IElement.cs" />
+    <Compile Include="Layout\ILayoutElement.cs" />
     <Compile Include="Layout\Standard\PassiveLayout.cs" />
     <Compile Include="Layout\Standard\RowLayout.cs" />
     <Compile Include="Layout\Standard\SwitchLayout.cs" />

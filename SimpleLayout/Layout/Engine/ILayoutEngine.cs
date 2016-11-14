@@ -8,6 +8,6 @@ namespace SimpleLayout.Layout.Engine
 {
     public interface ILayoutEngine
     {
-        void PerformLayout(IElement root, IList<IElement> elements);
+        void PerformLayout(ILayoutElement root, IList<ILayoutElement> elements);
     }
 }

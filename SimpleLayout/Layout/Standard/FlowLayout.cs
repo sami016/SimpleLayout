@@ -13,7 +13,7 @@ namespace SimpleLayout.Layout.Standard
         private float maxRowHeight = 0f;
         private Rectangle bounds;
 
-        public void Reset(IElement container)
+        public void Reset(ILayoutElement container)
         {
             bounds = container.Rectangle;
             currentX = 0f;
@@ -28,30 +28,30 @@ namespace SimpleLayout.Layout.Standard
             maxRowHeight = 0f;
         }
 
-        private void PlaceAtCurrentPosition(IElement element)
+        private void PlaceAtCurrentPosition(ILayoutElement layoutElement)
         {
             // Update position.
-            element.MoveTo(currentX, currentY);
+            layoutElement.MoveTo(currentX, currentY);
         }
 
-        public void Process(IElement element)
+        public void Process(ILayoutElement layoutElement)
         {
-            var size = element.RectangleWithMargin;
+            var size = layoutElement.RectangleWithMargin;
             // Calculate the other sides given the current x/y position.
             float rightHandX = currentX + size.Width;
             float bottomY = currentY + size.Height;
-            // Attempt to fit element in the current row.
+            // Attempt to fit layoutElement in the current row.
             if (rightHandX > bounds.Width)
             {
                 // Element will fit.
-                PlaceAtCurrentPosition(element);
+                PlaceAtCurrentPosition(layoutElement);
                 currentX = rightHandX;
-                maxRowHeight = Math.Max(maxRowHeight, element.RectangleWithMargin.Height);
+                maxRowHeight = Math.Max(maxRowHeight, layoutElement.RectangleWithMargin.Height);
                 return;
             }
             // Won't fit into row, so move down into new row...
             NewRow();
-            PlaceAtCurrentPosition(element);
+            PlaceAtCurrentPosition(layoutElement);
         }
     }
 }

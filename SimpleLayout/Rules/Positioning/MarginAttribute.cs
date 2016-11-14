@@ -23,9 +23,9 @@ namespace SimpleLayout.Rules.Positioning
             };
         }
 
-        public override void Process(IElement element)
+        public override void Process(ILayoutElement layoutElement)
         {
-            element.Margin = Margin;
+            layoutElement.Margin = Margin;
         }
     }
 }

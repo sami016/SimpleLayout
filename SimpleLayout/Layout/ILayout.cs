@@ -8,7 +8,7 @@ namespace SimpleLayout.Layout
 {
     public interface ILayout
     {
-        void Reset(IElement container);
-        void Process(IElement element);
+        void Reset(ILayoutElement container);
+        void Process(ILayoutElement layoutElement);
     }
 }

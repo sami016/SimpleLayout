@@ -13,14 +13,14 @@ namespace SimpleLayout.Layout.Standard
     /// </summary>
     public class SwitchLayout : ILayout
     {
-        public IElement Active { get; set; }
+        public ILayoutElement Active { get; set; }
 
         public SwitchLayout()
         {
             Active = null;
         }
 
-        public void Reset(IElement container)
+        public void Reset(ILayoutElement container)
         {
             if (Active == null)
             {
@@ -28,11 +28,11 @@ namespace SimpleLayout.Layout.Standard
             }
         }
 
-        public void Process(IElement element)
+        public void Process(ILayoutElement layoutElement)
         {
-            element.Rectangle.x = 0f;
-            element.Rectangle.y = 0f;
-            element.Visible = element == Active;
+            layoutElement.Rectangle.x = 0f;
+            layoutElement.Rectangle.y = 0f;
+            layoutElement.Visible = layoutElement == Active;
         }
     }
 }

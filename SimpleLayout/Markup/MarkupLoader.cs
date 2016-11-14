@@ -10,10 +10,10 @@ namespace SimpleLayout.Markup
 {
     public static class MarkupLoader
     {
-        public delegate void InitialiseElement(IElement element);
+        public delegate void InitialiseElement(ILayoutElement layoutElement);
 
         public static T Load<T>(InitialiseElement initialiseElement = null)
-            where T : class, IElement, new()
+            where T : class, ILayoutElement, new()
         {
             var type = typeof(T);
             var instance = new T();
@@ -23,49 +23,49 @@ namespace SimpleLayout.Markup
         }
 
 
-        private static IElement AddChildFields(IElement element, InitialiseElement initialiseElement = null)
+        private static ILayoutElement AddChildFields(ILayoutElement layoutElement, InitialiseElement initialiseElement = null)
         {
-            var type = element.GetType();
+            var type = layoutElement.GetType();
             foreach (var field in type.GetFields())
             {
-                if (!typeof(IElement).IsAssignableFrom(field.FieldType))
+                if (!typeof(ILayoutElement).IsAssignableFrom(field.FieldType))
                 {
                     continue;
                 }
-                var child = field.GetValue(element) as IElement;
+                var child = field.GetValue(layoutElement) as ILayoutElement;
                 initialiseElement?.Invoke(child);
                 ApplyAttributes(field.GetCustomAttributes(true), child);
                 // Recurse to child, filling in it's children if it has any.
                 AddChildFields(child, initialiseElement);
-                element.Children.Add(child);
-                child.Parent = element;
+                layoutElement.Children.Add(child);
+                child.Parent = layoutElement;
             }
             foreach (var property in type.GetProperties())
             {
                 var attributes = property.GetCustomAttributes(true);
-                if (!property.PropertyType.IsAssignableFrom(typeof(IElement))
+                if (!typeof(ILayoutElement).IsAssignableFrom(property.PropertyType)
                     || !attributes.Any(x => x is ElementAttribute))
                 {
                     continue;
                 }
-                var child = property.GetValue(element, new object[0]) as IElement;
+                var child = property.GetValue(layoutElement, new object[0]) as ILayoutElement;
                 initialiseElement?.Invoke(child);
                 // Recurse to child, filling in it's children if it has any.
                 AddChildFields(child, initialiseElement);
-                element.Children.Add(child);
+                layoutElement.Children.Add(child);
                 ApplyAttributes(attributes, child);
-                child.Parent = element;
+                child.Parent = layoutElement;
             }
-            return element;
+            return layoutElement;
         }
 
-        private static void ApplyAttributes(object[] attributes, IElement element)
+        private static void ApplyAttributes(object[] attributes, ILayoutElement layoutElement)
         {
             foreach (var attribute in attributes)
             {
                 if (attribute is IStyleRule)
                 {
-                    element.StyleRules.Add(attribute as IStyleRule);
+                    layoutElement.StyleRules.Add(attribute as IStyleRule);
                 }
             }
         }
